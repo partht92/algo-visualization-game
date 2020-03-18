@@ -1,0 +1,102 @@
+{"frames": {
+
+"0.png":
+{
+	"frame": {"x":1,"y":1,"w":98,"h":128},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":15,"y":0,"w":98,"h":128},
+	"sourceSize": {"w":128,"h":128},
+	"anchor": {"x":0,"y":0}
+},
+"1.png":
+{
+	"frame": {"x":901,"y":1,"w":50,"h":128},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":47,"y":0,"w":50,"h":128},
+	"sourceSize": {"w":128,"h":128},
+	"anchor": {"x":0,"y":0}
+},
+"2.png":
+{
+	"frame": {"x":101,"y":1,"w":98,"h":128},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":15,"y":0,"w":98,"h":128},
+	"sourceSize": {"w":128,"h":128},
+	"anchor": {"x":0,"y":0}
+},
+"3.png":
+{
+	"frame": {"x":201,"y":1,"w":98,"h":128},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":15,"y":0,"w":98,"h":128},
+	"sourceSize": {"w":128,"h":128},
+	"anchor": {"x":0,"y":0}
+},
+"4.png":
+{
+	"frame": {"x":301,"y":1,"w":98,"h":128},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":15,"y":0,"w":98,"h":128},
+	"sourceSize": {"w":128,"h":128},
+	"anchor": {"x":0,"y":0}
+},
+"5.png":
+{
+	"frame": {"x":401,"y":1,"w":98,"h":128},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":15,"y":0,"w":98,"h":128},
+	"sourceSize": {"w":128,"h":128},
+	"anchor": {"x":0,"y":0}
+},
+"6.png":
+{
+	"frame": {"x":501,"y":1,"w":98,"h":128},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":15,"y":0,"w":98,"h":128},
+	"sourceSize": {"w":128,"h":128},
+	"anchor": {"x":0,"y":0}
+},
+"7.png":
+{
+	"frame": {"x":601,"y":1,"w":98,"h":128},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":15,"y":0,"w":98,"h":128},
+	"sourceSize": {"w":128,"h":128},
+	"anchor": {"x":0,"y":0}
+},
+"8.png":
+{
+	"frame": {"x":701,"y":1,"w":98,"h":128},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":15,"y":0,"w":98,"h":128},
+	"sourceSize": {"w":128,"h":128},
+	"anchor": {"x":0,"y":0}
+},
+"9.png":
+{
+	"frame": {"x":801,"y":1,"w":98,"h":128},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":15,"y":0,"w":98,"h":128},
+	"sourceSize": {"w":128,"h":128},
+	"anchor": {"x":0,"y":0}
+}},
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "digit.png",
+	"format": "RGBA8888",
+	"size": {"w":952,"h":130},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:ccccf48ea296becfa8012319ef2ef4a6:61864b848cc007baba39220ef8d795ea:890b0f33665c8c50bd897bb4b76aaf03$"
+}
+}

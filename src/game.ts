@@ -1,7 +1,11 @@
 import 'phaser';
+import { ArrayContainer } from './datastructure_sprites/array_container';
+import { MoveCounter } from './game_world_sprites/move_counter';
 
 export default class Demo extends Phaser.Scene
 {
+    pointerCoordinates: Phaser.GameObjects.Text
+
     constructor ()
     {
         super('demo');
@@ -9,36 +13,33 @@ export default class Demo extends Phaser.Scene
 
     preload ()
     {
-        this.load.image('logo', 'assets/phaser3-logo.png');
-        this.load.image('libs', 'assets/libs.png');
-        this.load.glsl('bundle', 'assets/plasma-bundle.glsl.js');
-        this.load.glsl('stars', 'assets/starfields.glsl.js');
+        this.load.atlas('cell_state', 'assets/cell/cell_state.png', 'assets/cell/cell_state.json');
+        this.load.atlas('digit', 'assets/digits/digit.png', 'assets/digits/digit.json')
     }
 
     create ()
     {
-        this.add.shader('RGB Shift Field', 0, 0, 800, 600).setOrigin(0);
+        this.pointerCoordinates = this.add.text(10, 10, '', { fill: '#100000' });
 
-        this.add.shader('Plasma', 0, 412, 800, 172).setOrigin(0);
+        let mover_counter = new MoveCounter(this, 300, 100, 'cell_state', 'digit');
 
-        this.add.image(400, 300, 'libs');
+        let array = new ArrayContainer(this, 400, 300, 'cell_state', 'digit', [4,5,6,7,10], mover_counter);
+    }
 
-        const logo = this.add.image(400, 70, 'logo');
-
-        this.tweens.add({
-            targets: logo,
-            y: 350,
-            duration: 1500,
-            ease: 'Sine.inOut',
-            yoyo: true,
-            repeat: -1
-        })
+    update () 
+    {
+        let pointer = this.input.activePointer;
+        this.pointerCoordinates.setText([
+            'x: ' + pointer.worldX,
+            'y: ' + pointer.worldY,
+            'isDown: ' + pointer.isDown
+        ])
     }
 }
 
 const config = {
     type: Phaser.AUTO,
-    backgroundColor: '#125555',
+    backgroundColor: '#99ddff',
     width: 800,
     height: 600,
     scene: Demo
