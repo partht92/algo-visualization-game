@@ -8,24 +8,40 @@ class ArrayContainer extends Phaser.GameObjects.Container {
      * aligned
      */
 
+    activatedChild: VariableContainer
+
     constructor(scene: Phaser.Scene, 
                 x: integer, 
                 y: integer, 
-                cell_texture: string, 
-                digit_texture: string, 
-                value_array: integer[], 
-                move_counter: MoveCounter) {
+                cellTexture: string, 
+                digitTexture: string, 
+                valueArray: integer[]) {
         super(scene, x, y);
 
         this.scene.add.existing(this);
 
         //  Create some sprites - positions are relative to the Container x/y
         let children = []
-        value_array.forEach((val, idx) => {
-            children.push(new VariableContainer(scene, -200 + 115*idx, 0, val, cell_texture, digit_texture, move_counter));
+        valueArray.forEach((val, idx) => {
+            let varCont = new VariableContainer(scene, -200 + 115*idx, 0, val, cellTexture, digitTexture)
+            children.push(varCont);
         });
 
         this.add(children);
+
+        this.on('cellClicked', this.childClickHandler);
+    }
+
+    childClickHandler(container : VariableContainer) {
+        console.log("cell clicked");
+        if(container !== this.activatedChild) {
+            if(this.activatedChild)
+                this.activatedChild.toggleState();
+            this.activatedChild = container;     
+        }
+        if(!container.contentVisible) {
+            this.activatedChild = null;
+        }
     }
 }
 

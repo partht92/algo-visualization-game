@@ -1,39 +1,58 @@
 import 'phaser';
 import {IntegerType} from '../datatype_sprites/integer'
-import { MoveCounter } from '../game_world_sprites/move_counter';
 
 class VariableContainer extends Phaser.GameObjects.Container {
+    contentVisible: number = 0
+    cell: Phaser.GameObjects.Sprite
+
     constructor(scene: Phaser.Scene, 
                 x: number, 
                 y: number, 
                 value: integer, 
-                cell_texture: string, 
-                digit_texture: string, 
-                move_counter: MoveCounter) {
+                cellTexture: string, 
+                digitTexture: string) {
         super(scene, x, y);
         scene.add.existing(this);
         
         // Setup the value sprite
-        let digit = new IntegerType(scene, 0, 0, digit_texture, value, 0.25);
+        let digit = new IntegerType(scene, 0, 0, digitTexture, value, 0.25);
 
         // Setup the cell sprite
-        let cell = scene.add.sprite(0, 0, cell_texture)
+        let cell = scene.add.sprite(0, 0, cellTexture)
         cell.setInteractive();
-
-        cell.on('pointerdown', function() {
-            console.log('variable pointerover');
-            this.setFrame('cell_empty.png');
-            move_counter.incrementCounter();
-        });
-
-        cell.on('pointerup', function() {
-            console.log('variable pointerout');
-            this.setFrame('cell_coloured.png');
-        });
 
         // Overlay the cell with the digit
         this.add([cell, digit]);
-        this.bringToTop(cell)
+        this.bringToTop(cell);
+
+        this.cell = cell;
+
+        // Register event handlers
+        cell.on('clicked', this.cellClickHandler, this);
+    }
+
+    cellClickHandler(cell: Phaser.GameObjects.Sprite){
+        console.log("handling visibility");
+        // console.log(cell);
+
+        this.toggleState();
+
+        // Emit event signling a valid move being made
+        if(this.contentVisible)
+            this.scene.events.emit('incrementCounter');
+
+        // Inform parent container that the cell has been clicked
+        this.parentContainer.emit('cellClicked', this);
+    }
+
+    toggleState() {
+        if(this.contentVisible ^ 1) {
+            this.cell.setFrame('cell_empty.png');
+        }
+        else {
+            this.cell.setFrame('cell_coloured.png');
+        }
+        this.contentVisible ^= 1;
     }
 }
 

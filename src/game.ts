@@ -21,9 +21,18 @@ export default class Demo extends Phaser.Scene
     {
         this.pointerCoordinates = this.add.text(10, 10, '', { fill: '#100000' });
 
-        let mover_counter = new MoveCounter(this, 300, 100, 'cell_state', 'digit');
+        let moveCounter = new MoveCounter(this, 300, 100, 'cell_state', 'digit');
 
-        let array = new ArrayContainer(this, 400, 300, 'cell_state', 'digit', [4,5,6,7,10], mover_counter);
+        let array = new ArrayContainer(this, 400, 300, 'cell_state', 'digit', [4,5,6,7,10]);
+
+        this.registerInteractionHandlers();
+    }
+
+    registerInteractionHandlers() {
+        this.input.on('gameobjectdown', function (pointer, gameObject)
+        {
+            gameObject.emit('clicked', gameObject);
+        }, this);
     }
 
     update () 

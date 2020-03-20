@@ -2,35 +2,36 @@ import 'phaser';
 import {IntegerType} from '../datatype_sprites/integer';
 
 class MoveCounter extends Phaser.GameObjects.Container {
-    current_value: number;
-    value_object: IntegerType;
+    currentValue: number;
+    valueObject: IntegerType;
     scene: Phaser.Scene;
-    digit_texture: string;
+    digitTexture: string;
 
-    constructor(scene: Phaser.Scene, x: integer, y: integer, cell_texture: string, digit_texture: string) {
+    constructor(scene: Phaser.Scene, x: integer, y: integer, cell_texture: string, digitTexture: string) {
         super(scene, x, y)
 
         scene.add.existing(this);
 
         this.scene = scene;
-        this.digit_texture = digit_texture;
-        this.current_value = 0;
+        this.digitTexture = digitTexture;
+        this.currentValue = 0;
 
         // Setup the value sprite
-        this.value_object = new IntegerType(scene, 0, 0, digit_texture, this.current_value, 0.25);
+        this.valueObject = new IntegerType(scene, 0, 0, digitTexture, this.currentValue, 0.25);
         // Setup the cell sprite
         let cell = scene.add.sprite(0, 0, cell_texture)
         
         // Overlay the cell with the digit
-        this.add([cell, this.value_object]);
+        this.add([cell, this.valueObject]);
+
+        // Register event handler for the moveCounter
+        scene.events.on('incrementCounter', this.incrementCounter, this);
     }
 
     incrementCounter() {
-        console.log(this.current_value);
-        this.remove(this.value_object);
-        this.value_object = new IntegerType(this.scene, 0, 0, this.digit_texture, ++this.current_value, 0.25);
-        this.add(this.value_object);
-        console.log(this.current_value);
+        this.remove(this.valueObject);
+        this.valueObject = new IntegerType(this.scene, 0, 0, this.digitTexture, ++this.currentValue, 0.25);
+        this.add(this.valueObject);
     }
 
 }
