@@ -2,6 +2,9 @@ import 'phaser';
 import { ArrayContainer } from './datastructure_sprites/array_container';
 import { MoveCounter } from './game_world_sprites/move_counter';
 
+import Events = Phaser.Input.Events;
+import { VariableContainer } from './datastructure_sprites/variable_container';
+
 export default class Demo extends Phaser.Scene
 {
     pointerCoordinates: Phaser.GameObjects.Text
@@ -23,15 +26,16 @@ export default class Demo extends Phaser.Scene
 
         let moveCounter = new MoveCounter(this, 300, 100, 'cell_state', 'digit');
 
-        let array = new ArrayContainer(this, 400, 300, 'cell_state', 'digit', [4,5,6,7,10]);
+        let array = new ArrayContainer(this, 200, 300, 'cell_state', 'digit', [4,5,6,7,10]);
+
+        let variableCopyHolder = new VariableContainer(this, 200, 500, 0, 'cell_state', 'digit');
 
         this.registerInteractionHandlers();
     }
 
     registerInteractionHandlers() {
-        this.input.on('gameobjectdown', function (pointer, gameObject)
-        {
-            gameObject.emit('clicked', gameObject);
+        this.input.on(Events.DRAG_START, function (pointer, gameObject, dragX, dragY) {
+            console.log("dragging started");
         }, this);
     }
 

@@ -8,7 +8,7 @@ class IntegerType extends Phaser.GameObjects.Container {
 
         scene.add.existing(this);
         this.value = value;
-        
+
         let children = [];
         if( value == 0) {
             let digit = this.addDigitSprite(scene, 0, x, y, digit_texture, scale);
