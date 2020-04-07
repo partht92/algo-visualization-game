@@ -32,7 +32,7 @@ export default class Demo extends Phaser.Scene
 
         let variableCopyHolder = new VariableContainer(this, 450, 400, 0, 'cell_state', 'digit');
 
-        let problemStatement = new ProblemStatementSpace(this, 0, 0, "Test Problem Statement");
+        let problemStatement = new ProblemStatementSpace(this, 0, 0, "Find Maximum Number");
     }
 
     answerValidator(answer: any) {
