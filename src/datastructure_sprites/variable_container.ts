@@ -1,5 +1,8 @@
 import 'phaser';
-import {IntegerType} from '../datatype_sprites/integer'
+import {IntegerType} from '../datatype_sprites/integer';
+import {ContainerUtilities} from '../utilities/container';
+
+import Events = Phaser.Input.Events;
 
 class VariableContainer extends Phaser.GameObjects.Container {
     contentVisible: number = 0
@@ -10,14 +13,19 @@ class VariableContainer extends Phaser.GameObjects.Container {
     digitTexture: string
     zone: Phaser.GameObjects.Zone
 
+    readonly name = VariableContainer.name;
+
     private containerCopy: Phaser.GameObjects.Container
+
+    private static canBeSubmitted = true;
 
     constructor(scene: Phaser.Scene, 
                 x: number, 
                 y: number, 
                 value: integer, 
                 cellTexture: string, 
-                digitTexture: string) {
+                digitTexture: string,
+                disableDragGraphic: boolean = false) {
         super(scene, x, y);
         scene.add.existing(this);
 
@@ -41,10 +49,14 @@ class VariableContainer extends Phaser.GameObjects.Container {
         this.digit = digit;
 
         // Register event handlers
-        cell.on('pointerdown', this.cellClickHandler, this);
+        cell.on(Events.POINTER_DOWN, this.cellClickHandler, this);
 
         // Make variable container draggable
         this.setupDragEventHandlers(x,y);
+
+        if(!disableDragGraphic) {
+            ContainerUtilities.addDragGraphic(scene, this);
+        }
 
         this.bringToTop(cell);
     }
@@ -72,7 +84,7 @@ class VariableContainer extends Phaser.GameObjects.Container {
     private setupDragEventHandlers(x:number, y: number) {
         this.scene.input.setDraggable(this.cell);
 
-        this.cell.on('dragstart', function (pointer, dragX, dragY) {
+        this.cell.on(Events.DRAG_START, function (pointer, dragX, dragY) {
             if(!this.containerCopy) {
                 // When the dragging starts, create a copy of the Variable Container
                 this.containerCopy = new VariableContainer(
@@ -81,7 +93,8 @@ class VariableContainer extends Phaser.GameObjects.Container {
                     dragY, 
                     this.value, 
                     this.cellTexture, 
-                    this.digitTexture
+                    this.digitTexture,
+                    true
                 );
                 // Set transparency level
                 this.containerCopy.setAlpha(0.5);
@@ -94,7 +107,7 @@ class VariableContainer extends Phaser.GameObjects.Container {
             }
         }, this);
 
-        this.cell.on('drag', function (pointer, dragX, dragY) {
+        this.cell.on(Events.DRAG, function (pointer, dragX, dragY) {
             // While dragging, update the position on the screen
             if(this.contentVisible) {
                 this.containerCopy.x = this.x + dragX + ((this.parentContainer) ? this.parentContainer.x : 0);
@@ -102,7 +115,7 @@ class VariableContainer extends Phaser.GameObjects.Container {
             }
         }, this);
 
-        this.cell.on('drop', function(pointer, target){ 
+        this.cell.on(Events.DROP, function(pointer, target){ 
             // Only trigger an update when not dropping onto itself
             if(target.parentContainer !== this) {
                 // Update the value of the contaier being dropped in
@@ -113,19 +126,19 @@ class VariableContainer extends Phaser.GameObjects.Container {
             target.parentContainer.cell.clearTint();
         }, this);
 
-        this.cell.on('dragend', function (pointer, dragX, dragY, dropped) {
+        this.cell.on(Events.DRAG_END, function (pointer, dragX, dragY, dropped) {
             // Simply destroy the copy when the dragging ends
             this.destroyCopy();
     
         }, this);
 
-        this.cell.on('dragenter', function (pointer, dropZone) {
+        this.cell.on(Events.DRAG_ENTER, function (pointer, dropZone) {
             // Indicate that a drop zone has been entered
             dropZone.parentContainer.cell.setTint(0x00ff00);
     
         }, this);
     
-        this.cell.on('dragleave', function (pointer, dropZone) {
+        this.cell.on(Events.DRAG_LEAVE, function (pointer, dropZone) {
             // Indicate that the drop zone has been exited
             dropZone.parentContainer.cell.clearTint();
     
@@ -166,7 +179,11 @@ class VariableContainer extends Phaser.GameObjects.Container {
         this.contentVisible ^= 1;
     }
 
-    updateValue(newValue) {
+    /**
+     * Updates the value of the {@link VariableContainer}
+     * @param newValue new value to update to 
+     */
+    updateValue(newValue: number) {
         this.remove(this.digit);
         this.digit = new IntegerType(this.scene, 0, 0, this.digitTexture, newValue, 0.25);
         this.value = newValue;

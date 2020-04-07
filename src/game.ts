@@ -1,6 +1,7 @@
 import 'phaser';
 import { ArrayContainer } from './datastructure_sprites/array_container';
 import { MoveCounter } from './game_world_sprites/move_counter';
+import { SubmitSpace } from './game_world_sprites/submit_space';
 
 import Events = Phaser.Input.Events;
 import { VariableContainer } from './datastructure_sprites/variable_container';
@@ -17,26 +18,37 @@ export default class Demo extends Phaser.Scene
     preload ()
     {
         this.load.atlas('cell_state', 'assets/cell/cell_state.png', 'assets/cell/cell_state.json');
-        this.load.atlas('digit', 'assets/digits/digit.png', 'assets/digits/digit.json')
+        this.load.atlas('digit', 'assets/digits/digit.png', 'assets/digits/digit.json');
+        this.load.atlas('submit_button', 'assets/submit_button/submit_button.png', 'assets/submit_button/submit_button.json');
+        this.load.bitmapFont('test_font', 'assets/test_font/font.png', 'assets/test_font/font.fnt');
     }
 
     create ()
     {
         this.pointerCoordinates = this.add.text(10, 10, '', { fill: '#100000' });
 
-        let moveCounter = new MoveCounter(this, 300, 100, 'cell_state', 'digit');
+        let submitSpace = new SubmitSpace(this, 0, this.scale.height-100);
 
-        let array = new ArrayContainer(this, 200, 300, 'cell_state', 'digit', [4,5,6,7,10]);
+        let moveCounter = new MoveCounter(this, 740, 60, 'cell_state', 'digit');
 
-        let variableCopyHolder = new VariableContainer(this, 200, 500, 0, 'cell_state', 'digit');
+        let array = new ArrayContainer(this, 200, 200, 'cell_state', 'digit', [4,5,6,7,10]);
 
-        this.registerInteractionHandlers();
+        let variableCopyHolder = new VariableContainer(this, 200, 400, 0, 'cell_state', 'digit');
+
+        // Validate answer submitted
+        this.events.on('answerSubmitted', this.registerAnswerValidator, this);
     }
 
-    registerInteractionHandlers() {
-        this.input.on(Events.DRAG_START, function (pointer, gameObject, dragX, dragY) {
-            console.log("dragging started");
-        }, this);
+    registerAnswerValidator(answer: any) {
+        if(answer.name == VariableContainer.name) {
+            if(answer.value == 10) 
+                console.log('Correct Answer!')
+            else 
+                console.log('Incorrect Answer!')
+        }
+        else {
+            console.log('Incorrect Type. Expected ', VariableContainer.name, ' got ', answer.name, '!')
+        }
     }
 
     update () 
