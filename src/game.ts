@@ -2,6 +2,7 @@ import 'phaser';
 import { ArrayContainer } from './datastructure_sprites/array_container';
 import { MoveCounter } from './game_world_sprites/move_counter';
 import { SubmitSpace } from './game_world_sprites/submit_space';
+import { AnswerResponse } from './answerResponse';
 
 import Events = Phaser.Input.Events;
 import { VariableContainer } from './datastructure_sprites/variable_container';
@@ -19,7 +20,6 @@ export default class Demo extends Phaser.Scene
     {
         this.load.atlas('cell_state', 'assets/cell/cell_state.png', 'assets/cell/cell_state.json');
         this.load.atlas('digit', 'assets/digits/digit.png', 'assets/digits/digit.json');
-        this.load.atlas('submit_button', 'assets/submit_button/submit_button.png', 'assets/submit_button/submit_button.json');
         this.load.bitmapFont('test_font', 'assets/test_font/font.png', 'assets/test_font/font.fnt');
     }
 
@@ -27,27 +27,24 @@ export default class Demo extends Phaser.Scene
     {
         this.pointerCoordinates = this.add.text(10, 10, '', { fill: '#100000' });
 
-        let submitSpace = new SubmitSpace(this, 0, this.scale.height-100);
+        let submitSpace = new SubmitSpace(this, 0, this.scale.height-100, this.answerValidator);
 
-        let moveCounter = new MoveCounter(this, 740, 60, 'cell_state', 'digit');
+        let moveCounter = new MoveCounter(this, this.scale.width-60, 60, 'cell_state', 'digit');
 
         let array = new ArrayContainer(this, 200, 200, 'cell_state', 'digit', [4,5,6,7,10]);
 
         let variableCopyHolder = new VariableContainer(this, 200, 400, 0, 'cell_state', 'digit');
-
-        // Validate answer submitted
-        this.events.on('answerSubmitted', this.registerAnswerValidator, this);
     }
 
-    registerAnswerValidator(answer: any) {
+    answerValidator(answer: any) {
         if(answer.name == VariableContainer.name) {
             if(answer.value == 10) 
-                console.log('Correct Answer!')
+                return AnswerResponse.CORRECT_ANSWER
             else 
-                console.log('Incorrect Answer!')
+                return AnswerResponse.INCORRECT_ANSWER
         }
         else {
-            console.log('Incorrect Type. Expected ', VariableContainer.name, ' got ', answer.name, '!')
+            return AnswerResponse.INCORRECT_TYPE
         }
     }
 
@@ -65,7 +62,7 @@ export default class Demo extends Phaser.Scene
 const config = {
     type: Phaser.AUTO,
     backgroundColor: '#99ddff',
-    width: 800,
+    width: 1000,
     height: 600,
     scene: Demo
 };

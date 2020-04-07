@@ -50,6 +50,7 @@ class ContainerUtilities {
         dragKnob.on(Events.DROP, function(pointer, target) {
             if(target.name == 'SubmitZone') {
                 console.log(target);
+                target.emit('answerSubmitted', gameObject);
                 this.scene.events.emit('answerSubmitted', gameObject);
             }
         });
