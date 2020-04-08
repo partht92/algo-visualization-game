@@ -41,6 +41,7 @@ class VariableContainer extends Phaser.GameObjects.Container {
         this.cell = scene.add.sprite(0, 0, cellTexture)
         this.cell.setInteractive();
         this.cell.input.dropZone = true;
+        this.cell.name = 'VariableContainerCell'
 
         // Overlay the cell with the digit
         this.add([this.cell, this.digit]);
@@ -113,14 +114,16 @@ class VariableContainer extends Phaser.GameObjects.Container {
         }, this);
 
         this.cell.on(Events.DROP, function(pointer, target){ 
-            // Only trigger an update when not dropping onto itself
-            if(target.parentContainer !== this) {
-                // Update the value of the contaier being dropped in
-                target.parentContainer.updateValue(this.value);
-                // Emit a message notifying about the move
-                this.scene.events.emit('incrementCounter');
-            }
-            target.parentContainer.cell.clearTint();
+            if(target.name == 'VariableContainerCell') {
+                // Only trigger an update when not dropping onto itself
+                if(target.parentContainer !== this) {
+                    // Update the value of the contaier being dropped in
+                    target.parentContainer.updateValue(this.value);
+                    // Emit a message notifying about the move
+                    this.scene.events.emit('incrementCounter');
+                }
+                target.parentContainer.cell.clearTint();
+            }  
         }, this);
 
         this.cell.on(Events.DRAG_END, function (pointer, dragX, dragY, dropped) {
@@ -130,15 +133,18 @@ class VariableContainer extends Phaser.GameObjects.Container {
         }, this);
 
         this.cell.on(Events.DRAG_ENTER, function (pointer, dropZone) {
-            // Indicate that a drop zone has been entered
-            dropZone.parentContainer.cell.setTint(0x00ff00);
+            if(dropZone.name == 'VariableContainerCell') {
+                // Indicate that a drop zone has been entered
+                dropZone.parentContainer.cell.setTint(0x00ff00);
+            }
     
         }, this);
     
         this.cell.on(Events.DRAG_LEAVE, function (pointer, dropZone) {
-            // Indicate that the drop zone has been exited
-            dropZone.parentContainer.cell.clearTint();
-    
+            if(dropZone.name == 'VariableContainerCell') {
+                // Indicate that the drop zone has been exited
+                dropZone.parentContainer.cell.clearTint();
+            }
         }, this);
     }
 
