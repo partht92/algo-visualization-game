@@ -43,7 +43,7 @@ class ProblemStatementSpace extends Phaser.GameObjects.Container {
         resizeButton.setInteractive(hitArea, Phaser.Geom.Circle.Contains);
 
         resizeButton.on(Events.POINTER_UP, function(){
-            console.log('The resize button clicked!');
+            console.debug('The resize button clicked!');
             if(this.isOpen) {
                 this.scene.tweens.add({
                     targets: this,

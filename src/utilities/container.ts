@@ -5,7 +5,7 @@ import Events = Phaser.Input.Events;
 class ContainerUtilities {
     static addDragGraphic(scene: Phaser.Scene, gameObject: Phaser.GameObjects.Container) {
         // Get the boundary rectangle
-        let boundaryRect = ContainerUtilities.getRectangularBoundary(gameObject);
+        let boundaryRect = ContainerUtilities.getRectangularBoundary(gameObject, 5);
 
         // Add array boundary graphic
         let arrayBoundary = scene.add.graphics();
@@ -72,7 +72,9 @@ class ContainerUtilities {
         gameObject.add([arrayBoundary, dragKnob]);
     }
 
-    static getRectangularBoundary(container: Phaser.GameObjects.Container): Phaser.Geom.Rectangle {
+    static getRectangularBoundary(container: Phaser.GameObjects.Container, padding ?: number): Phaser.Geom.Rectangle {
+        let boundaryPadding = (padding) ? padding : 0;
+
         // Calculate the width of the conatiner based on it's children
         let x_min = Number.POSITIVE_INFINITY
         let y_min = Number.POSITIVE_INFINITY
@@ -109,7 +111,12 @@ class ContainerUtilities {
         });
 
         
-        return new Phaser.Geom.Rectangle(x_min, y_min, x_max - x_min, y_max - y_min);
+        return new Phaser.Geom.Rectangle(
+            x_min - boundaryPadding, 
+            y_min - boundaryPadding, 
+            x_max - x_min + 2* boundaryPadding, 
+            y_max - y_min + 2* boundaryPadding
+        );
     }
 }
 

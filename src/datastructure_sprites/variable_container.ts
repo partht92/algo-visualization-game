@@ -1,5 +1,4 @@
 import 'phaser';
-import {IntegerType} from '../datatype_sprites/integer';
 import {ContainerUtilities} from '../utilities/container';
 
 import Events = Phaser.Input.Events;
@@ -7,7 +6,7 @@ import Events = Phaser.Input.Events;
 class VariableContainer extends Phaser.GameObjects.Container {
     contentVisible: number = 0
     cell: Phaser.GameObjects.Sprite
-    digit: IntegerType
+    digit: Phaser.GameObjects.BitmapText 
     value: integer
     cellTexture: string
     digitTexture: string
@@ -35,21 +34,19 @@ class VariableContainer extends Phaser.GameObjects.Container {
         this.digitTexture = digitTexture;
         
         // Setup the value sprite
-        let digit = new IntegerType(scene, 0, 0, digitTexture, value, 0.25);
+        this.digit = this.scene.add.bitmapText(0, 0, 'test_font', value.toString(), 30);
+        this.digit.setOrigin(0.5);
 
         // Setup the cell sprite
-        let cell = scene.add.sprite(0, 0, cellTexture)
-        cell.setInteractive();
-        cell.input.dropZone = true;
+        this.cell = scene.add.sprite(0, 0, cellTexture)
+        this.cell.setInteractive();
+        this.cell.input.dropZone = true;
 
         // Overlay the cell with the digit
-        this.add([cell, digit]);
-
-        this.cell = cell;
-        this.digit = digit;
+        this.add([this.cell, this.digit]);
 
         // Register event handlers
-        cell.on(Events.POINTER_DOWN, this.cellClickHandler, this);
+        this.cell.on(Events.POINTER_DOWN, this.cellClickHandler, this);
 
         // Make variable container draggable
         this.setupDragEventHandlers(x,y);
@@ -58,7 +55,7 @@ class VariableContainer extends Phaser.GameObjects.Container {
             ContainerUtilities.addDragGraphic(scene, this);
         }
 
-        this.bringToTop(cell);
+        this.bringToTop(this.cell);
     }
 
     /**
@@ -185,11 +182,12 @@ class VariableContainer extends Phaser.GameObjects.Container {
      */
     updateValue(newValue: number) {
         this.remove(this.digit);
-        this.digit = new IntegerType(this.scene, 0, 0, this.digitTexture, newValue, 0.25);
+        this.digit = this.scene.add.bitmapText(0, 0, 'test_font', newValue.toString(), 30); 
+        this.digit.setOrigin(0.5);
         this.value = newValue;
         this.add(this.digit);
         this.bringToTop(this.cell);
-        console.log('updated value for', this);
+        console.debug('updated value for', this);
     }
 }
 

@@ -1,9 +1,8 @@
 import 'phaser';
-import {IntegerType} from '../datatype_sprites/integer';
 
 class MoveCounter extends Phaser.GameObjects.Container {
     currentValue: number;
-    valueObject: IntegerType;
+    valueObject: Phaser.GameObjects.BitmapText; 
     scene: Phaser.Scene;
     digitTexture: string;
 
@@ -17,7 +16,9 @@ class MoveCounter extends Phaser.GameObjects.Container {
         this.currentValue = 0;
 
         // Setup the value sprite
-        this.valueObject = new IntegerType(scene, 0, 0, digitTexture, this.currentValue, 0.25);
+        this.valueObject =  this.scene.add.bitmapText(0, 0, 'test_font', this.currentValue.toString(), 30);
+        this.valueObject.setOrigin(0.5);
+
         // Setup the cell sprite
         let cell = scene.add.sprite(0, 0, cell_texture)
         
@@ -30,7 +31,8 @@ class MoveCounter extends Phaser.GameObjects.Container {
 
     incrementCounter() {
         this.remove(this.valueObject);
-        this.valueObject = new IntegerType(this.scene, 0, 0, this.digitTexture, ++this.currentValue, 0.25);
+        this.valueObject = this.scene.add.bitmapText(0, 0, 'test_font', (++this.currentValue).toString(), 30);
+        this.valueObject.setOrigin(0.5);
         this.add(this.valueObject);
     }
 

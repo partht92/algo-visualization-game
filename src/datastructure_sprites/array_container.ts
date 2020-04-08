@@ -14,7 +14,7 @@ class ArrayContainer extends Phaser.GameObjects.Container {
     activatedChild: VariableContainer
 
     readonly name = ArrayContainer.name;
-    
+
     private static canBeSubmitted = true;
 
     constructor(scene: Phaser.Scene, 
@@ -42,7 +42,6 @@ class ArrayContainer extends Phaser.GameObjects.Container {
     }
 
     childClickHandler(container : VariableContainer) {
-        console.log("cell clicked");
         if(container !== this.activatedChild) {
             if(this.activatedChild)
                 this.activatedChild.toggleState();
